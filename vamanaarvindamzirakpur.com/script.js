@@ -100,6 +100,8 @@
     'tour-fullscreen': { title: 'Unlock the 3D Virtual Tour', subtext: "Share your details and we'll open the full-screen tour." }
   };
 
+  var modalHistoryPushed = false;
+
   function openModal(action, unitType) {
     pendingAction = action;
     pendingUnitType = unitType || '';
@@ -109,14 +111,30 @@
     modalOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
     document.getElementById('modalName').focus();
+    history.pushState({ leadModal: true }, '');
+    modalHistoryPushed = true;
   }
-  function closeModal() {
+  function closeModal(fromPopState) {
     modalOverlay.hidden = true;
     document.body.style.overflow = '';
     pendingAction = null;
     pendingUnitType = '';
+    if (modalHistoryPushed) {
+      modalHistoryPushed = false;
+      if (!fromPopState) {
+        // Unwind the synthetic history entry we pushed when opening, without
+        // leaving the page — pressing the actual close/X/backdrop/Escape
+        // shouldn't leave an extra "phantom" back-button step behind.
+        history.back();
+      }
+    }
   }
-  modalClose.addEventListener('click', closeModal);
+  window.addEventListener('popstate', function () {
+    if (!modalOverlay.hidden) {
+      closeModal(true);
+    }
+  });
+  modalClose.addEventListener('click', function () { closeModal(); });
   modalOverlay.addEventListener('click', function (e) {
     if (e.target === modalOverlay) closeModal();
   });
