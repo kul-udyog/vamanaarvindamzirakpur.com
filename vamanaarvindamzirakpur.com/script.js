@@ -5,6 +5,30 @@
   var PROJECT_NAME = 'Vamana Arvindam';
   var WHATSAPP_NUMBER = '917888913402';
   var CALL_NUMBER = '+917888913402';
+  var LEAD_STORAGE_KEY = 'vamanaArvindamLead';
+
+  // Accepts 10-digit numbers with or without +91 / 91 / 0 prefixes, spaces,
+  // dashes, or parentheses, and normalizes down to a plain 10-digit string.
+  function normalizePhone(raw) {
+    var digits = (raw || '').replace(/\D/g, '');
+    if (digits.length === 10) return digits;
+    if (digits.length === 12 && digits.indexOf('91') === 0) return digits.slice(2);
+    if (digits.length === 11 && digits.indexOf('0') === 0) return digits.slice(1);
+    if (digits.length === 13 && digits.indexOf('091') === 0) return digits.slice(3);
+    return null;
+  }
+
+  function getStoredLead() {
+    try {
+      var raw = localStorage.getItem(LEAD_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (err) { return null; }
+  }
+  function storeLead(name, phone) {
+    try {
+      localStorage.setItem(LEAD_STORAGE_KEY, JSON.stringify({ name: name, phone: phone }));
+    } catch (err) { /* ignore — storage may be unavailable, not critical */ }
+  }
 
   document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -102,55 +126,13 @@
 
   var modalHistoryPushed = false;
 
-  function openModal(action, unitType) {
-    pendingAction = action;
-    pendingUnitType = unitType || '';
-    var copy = MODAL_COPY[action] || MODAL_COPY.enquire;
-    modalTitle.textContent = copy.title;
-    modalSubtext.textContent = copy.subtext;
-    modalOverlay.hidden = false;
-    document.body.style.overflow = 'hidden';
-    document.getElementById('modalName').focus();
-    history.pushState({ leadModal: true }, '');
-    modalHistoryPushed = true;
-  }
-  function closeModal(fromPopState) {
-    modalOverlay.hidden = true;
-    document.body.style.overflow = '';
-    pendingAction = null;
-    pendingUnitType = '';
-    if (modalHistoryPushed) {
-      modalHistoryPushed = false;
-      if (!fromPopState) {
-        // Unwind the synthetic history entry we pushed when opening, without
-        // leaving the page — pressing the actual close/X/backdrop/Escape
-        // shouldn't leave an extra "phantom" back-button step behind.
-        history.back();
-      }
-    }
-  }
-  window.addEventListener('popstate', function () {
-    if (!modalOverlay.hidden) {
-      closeModal(true);
-    }
-  });
-  modalClose.addEventListener('click', function () { closeModal(); });
-  modalOverlay.addEventListener('click', function (e) {
-    if (e.target === modalOverlay) closeModal();
-  });
-
-  modalForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var name = document.getElementById('modalName').value.trim();
-    var phone = document.getElementById('modalPhone').value.trim();
-    if (!name || !/^\d{10}$/.test(phone)) {
-      showToast('Please enter a valid name and 10-digit mobile number.');
-      return;
-    }
-    submitLead(name, phone, { source: 'lead-modal', action: pendingAction, unitType: pendingUnitType });
-    var action = pendingAction;
-    closeModal();
-    modalForm.reset();
+  // Runs the actual outcome of an action once we have a name + valid phone,
+  // whether that came from the modal form just now or from a stored lead
+  // on a repeat visit. Kept separate from modal open/close so tel:/WhatsApp
+  // navigation is never delayed or interrupted by history cleanup.
+  function performAction(action, unitType, name, phone, isReturning) {
+    submitLead(name, phone, { source: isReturning ? 'returning-visitor' : 'lead-modal', action: action, unitType: unitType });
+    storeLead(name, phone);
     if (action === 'call') {
       window.location.href = 'tel:' + CALL_NUMBER;
       showToast('Thank you! Connecting you now.');
@@ -172,6 +154,70 @@
     } else {
       showToast('Thank you! Our team will call you shortly.');
     }
+  }
+
+  function hideModal() {
+    modalOverlay.hidden = true;
+    document.body.style.overflow = '';
+    pendingAction = null;
+    pendingUnitType = '';
+  }
+
+  function openModal(action, unitType) {
+    // Returning visitor who already gave us their details once — skip the
+    // form entirely and go straight to the outcome. No repeat interruptions.
+    var stored = getStoredLead();
+    if (stored && stored.name && stored.phone) {
+      performAction(action, unitType, stored.name, stored.phone, true);
+      return;
+    }
+    pendingAction = action;
+    pendingUnitType = unitType || '';
+    var copy = MODAL_COPY[action] || MODAL_COPY.enquire;
+    modalTitle.textContent = copy.title;
+    modalSubtext.textContent = copy.subtext;
+    modalOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('modalName').focus();
+    history.pushState({ leadModal: true }, '');
+    modalHistoryPushed = true;
+  }
+
+  // Explicit "I don't want to continue" dismissal (X button, backdrop click,
+  // Escape, or the browser back button) — unwinds the synthetic history
+  // entry so back-button behavior stays clean.
+  function dismissModal(fromPopState) {
+    hideModal();
+    if (modalHistoryPushed) {
+      modalHistoryPushed = false;
+      if (!fromPopState) history.back();
+    }
+  }
+  window.addEventListener('popstate', function () {
+    if (!modalOverlay.hidden) dismissModal(true);
+  });
+  modalClose.addEventListener('click', function () { dismissModal(); });
+  modalOverlay.addEventListener('click', function (e) {
+    if (e.target === modalOverlay) dismissModal();
+  });
+
+  modalForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.getElementById('modalName').value.trim();
+    var phone = normalizePhone(document.getElementById('modalPhone').value);
+    if (!name || !phone) {
+      showToast('Please enter a valid name and mobile number.');
+      return;
+    }
+    var action = pendingAction;
+    var unitType = pendingUnitType;
+    // Hide immediately (without the history.back() unwind) so a tel: or
+    // wa.me navigation right after isn't raced or cancelled by it. The
+    // harmless leftover history entry is a no-op if the user later hits back.
+    hideModal();
+    modalHistoryPushed = false;
+    modalForm.reset();
+    performAction(action, unitType, name, phone, false);
   });
 
   /* ---------------- Global action router ---------------- */
@@ -190,15 +236,23 @@
   function wireForm(formId, sourceLabel) {
     var form = document.getElementById(formId);
     if (!form) return;
+    var nameInput = form.querySelector('input[name="name"]');
+    var phoneInput = form.querySelector('input[name="phone"]');
+    var stored = getStoredLead();
+    if (stored) {
+      if (stored.name) nameInput.value = stored.name;
+      if (stored.phone) phoneInput.value = stored.phone;
+    }
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var name = form.querySelector('input[name="name"]').value.trim();
-      var phone = form.querySelector('input[name="phone"]').value.trim();
-      if (!name || !/^\d{10}$/.test(phone)) {
-        showToast('Please enter a valid name and 10-digit mobile number.');
+      var name = nameInput.value.trim();
+      var phone = normalizePhone(phoneInput.value);
+      if (!name || !phone) {
+        showToast('Please enter a valid name and mobile number.');
         return;
       }
       submitLead(name, phone, { source: sourceLabel, action: 'form-submit' });
+      storeLead(name, phone);
       form.reset();
       showToast('Thank you! Our team will call you shortly.');
     });
@@ -209,7 +263,7 @@
   /* ---------------- Escape key closes overlays ---------------- */
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
-      if (!modalOverlay.hidden) closeModal();
+      if (!modalOverlay.hidden) dismissModal();
       closeNav();
     }
   });
