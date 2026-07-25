@@ -120,7 +120,6 @@
     whatsapp: { title: 'Share your details to continue', subtext: "We'll open WhatsApp right after." },
     enquire: { title: 'Get Price Details & Callback', subtext: 'Share your details and our team will reach out shortly.' },
     brochure: { title: 'Get the Brochure on WhatsApp', subtext: "Share your details and we'll send the brochure to you on WhatsApp." },
-    'tour-inline': { title: 'Unlock the 3D Virtual Tour', subtext: 'Share your details to view the interactive tour.' },
     'tour-fullscreen': { title: 'Unlock the 3D Virtual Tour', subtext: "Share your details and we'll open the full-screen tour." }
   };
 
@@ -144,10 +143,6 @@
       var brochureMsg = encodeURIComponent('Hi, I\'m ' + name + '. Could you please share the Vamana Arvindam brochure?');
       window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + brochureMsg, '_blank');
       showToast('Thank you! Opening WhatsApp to send your brochure.');
-    } else if (action === 'tour-inline') {
-      var overlay = document.getElementById('tourGateOverlay');
-      if (overlay) overlay.remove();
-      showToast('Thank you! Enjoy the tour.');
     } else if (action === 'tour-fullscreen') {
       window.open('https://my.matterport.com/show/?m=rdCmhpWsQH5', '_blank');
       showToast('Thank you! Opening the full tour.');
@@ -226,7 +221,7 @@
     if (!btn) return;
     var action = btn.getAttribute('data-action');
 
-    if (action === 'call' || action === 'whatsapp' || action === 'enquire' || action === 'brochure' || action === 'tour-inline' || action === 'tour-fullscreen') {
+    if (action === 'call' || action === 'whatsapp' || action === 'enquire' || action === 'brochure' || action === 'tour-fullscreen') {
       e.preventDefault();
       openModal(action, btn.getAttribute('data-unit-type'));
     }
