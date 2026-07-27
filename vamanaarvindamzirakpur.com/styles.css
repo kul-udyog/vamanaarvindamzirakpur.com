@@ -325,6 +325,14 @@ body { padding-bottom: 0; }
 }
 .hero-form input:focus { outline: 2px solid var(--color-bronze); outline-offset: 1px; }
 .form-microcopy { font-size: 0.74rem; color: var(--color-text-muted); margin: 10px 0 0; }
+.already-submitted { text-align: center; padding: 8px 0; }
+.already-submitted-check {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 50%; background: var(--color-bronze);
+  color: #fff; font-size: 1.3rem; margin-bottom: 12px;
+}
+.already-submitted-title { font-family: var(--font-display); font-size: 1.15rem; color: var(--color-text-dark); margin: 0 0 6px; }
+.already-submitted-text { font-size: 0.88rem; color: var(--color-text-muted); margin: 0; }
 
 .scroll-cue {
   position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 1;
@@ -595,6 +603,8 @@ body { padding-bottom: 0; }
   width: 100%; padding: 13px 16px; margin-bottom: 12px; border-radius: var(--radius-sm);
   border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.92); font-size: 0.95rem;
 }
+.contact-form .already-submitted-title { color: var(--color-text-on-dark); }
+.contact-form .already-submitted-text { color: #D8D0BE; }
 
 /* ==========================================================================
    FAQ

@@ -26,8 +26,14 @@
   }
   function storeLead(name, phone) {
     try {
-      localStorage.setItem(LEAD_STORAGE_KEY, JSON.stringify({ name: name, phone: phone }));
+      localStorage.setItem(LEAD_STORAGE_KEY, JSON.stringify({ name: name, phone: phone, submittedAt: new Date().toISOString() }));
     } catch (err) { /* ignore — storage may be unavailable, not critical */ }
+  }
+  function formatSubmittedAt(iso) {
+    try {
+      var d = new Date(iso);
+      return d.toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+    } catch (err) { return ''; }
   }
 
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -129,23 +135,28 @@
   // whether that came from the modal form just now or from a stored lead
   // on a repeat visit. Kept separate from modal open/close so tel:/WhatsApp
   // navigation is never delayed or interrupted by history cleanup.
-  function performAction(action, unitType, name, phone, isReturning) {
-    submitLead(name, phone, { source: isReturning ? 'returning-visitor' : 'lead-modal', action: action, unitType: unitType });
-    storeLead(name, phone);
+  function performAction(action, unitType, name, phone, isReturning, submittedAt) {
+    if (!isReturning) {
+      submitLead(name, phone, { source: 'lead-modal', action: action, unitType: unitType });
+      storeLead(name, phone);
+    }
+    var whenText = isReturning ? ' You submitted your details on ' + formatSubmittedAt(submittedAt) + '.' : '';
     if (action === 'call') {
       window.location.href = 'tel:' + CALL_NUMBER;
-      showToast('Thank you! Connecting you now.');
+      showToast('Thank you!' + whenText + ' Connecting you now.');
     } else if (action === 'whatsapp') {
       var msg = encodeURIComponent('Hi, I\'m ' + name + '. I\'m interested in Vamana Arvindam, Zirakpur. Please share more details.');
       window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank');
-      showToast('Thank you! Connecting you now.');
+      showToast('Thank you!' + whenText + ' Connecting you now.');
     } else if (action === 'brochure') {
       var brochureMsg = encodeURIComponent('Hi, I\'m ' + name + '. Could you please share the Vamana Arvindam brochure?');
       window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + brochureMsg, '_blank');
-      showToast('Thank you! Opening WhatsApp to send your brochure.');
+      showToast('Thank you!' + whenText + ' Opening WhatsApp to send your brochure.');
     } else if (action === 'tour-fullscreen') {
       window.open('https://my.matterport.com/show/?m=rdCmhpWsQH5', '_blank');
-      showToast('Thank you! Opening the full tour.');
+      showToast('Thank you!' + whenText + ' Opening the full tour.');
+    } else if (isReturning) {
+      showToast('Your enquiry was already submitted on ' + formatSubmittedAt(submittedAt) + '. Our team will contact you shortly.');
     } else {
       showToast('Thank you! Our team will call you shortly.');
     }
@@ -163,7 +174,7 @@
     // form entirely and go straight to the outcome. No repeat interruptions.
     var stored = getStoredLead();
     if (stored && stored.name && stored.phone) {
-      performAction(action, unitType, stored.name, stored.phone, true);
+      performAction(action, unitType, stored.name, stored.phone, true, stored.submittedAt);
       return;
     }
     pendingAction = action;
@@ -228,16 +239,25 @@
   });
 
   /* ---------------- Hero & Contact lead forms ---------------- */
+  function renderAlreadySubmitted(form, submittedAt) {
+    form.innerHTML =
+      '<div class="already-submitted">' +
+        '<span class="already-submitted-check" aria-hidden="true">&#10003;</span>' +
+        '<p class="already-submitted-title">You\'re all set!</p>' +
+        '<p class="already-submitted-text">Your enquiry was submitted on ' + formatSubmittedAt(submittedAt) + '. Our team will contact you shortly.</p>' +
+      '</div>';
+  }
+
   function wireForm(formId, sourceLabel) {
     var form = document.getElementById(formId);
     if (!form) return;
+    var stored = getStoredLead();
+    if (stored && stored.name && stored.phone) {
+      renderAlreadySubmitted(form, stored.submittedAt);
+      return;
+    }
     var nameInput = form.querySelector('input[name="name"]');
     var phoneInput = form.querySelector('input[name="phone"]');
-    var stored = getStoredLead();
-    if (stored) {
-      if (stored.name) nameInput.value = stored.name;
-      if (stored.phone) phoneInput.value = stored.phone;
-    }
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var name = nameInput.value.trim();
@@ -248,7 +268,8 @@
       }
       submitLead(name, phone, { source: sourceLabel, action: 'form-submit' });
       storeLead(name, phone);
-      form.reset();
+      var submittedAt = new Date().toISOString();
+      renderAlreadySubmitted(form, submittedAt);
       showToast('Thank you! Our team will call you shortly.');
     });
   }
