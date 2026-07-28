@@ -53,8 +53,7 @@
       "@id": "https://vamanaarvindamzirakpur.com/#organization",
       "name": "Vamana Developers",
       "url": "https://vamanaarvindamzirakpur.com/",
-      "logo": "https://vamanaarvindamzirakpur.com/images/brand/logo-full.png",
-      "sameAs": ["https://vamanaarvindam.com/"]
+      "logo": "https://vamanaarvindamzirakpur.com/images/brand/logo-full.png"
     },
     {
       "@type": "RealEstateAgent",
@@ -388,14 +387,30 @@
   </section>
 
   <!-- ============ PRICING ============ -->
-  <section class="section section-brochure" id="pricing">
-    <div class="container brochure-grid">
+  <section class="section section-light" id="pricing">
+    <div class="container">
       <p class="section-eyebrow">Pricing</p>
       <h2 class="section-title">Vamana Arvindam <em>Price List</em></h2>
       <div class="gold-rule"></div>
       <p class="pricing-intro">Starting from <strong>&#8377;2.03 Cr onwards</strong></p>
-      <p class="brochure-copy">Prices vary by configuration, tower, and floor. Share your details and we'll send you the complete, current price list.</p>
-      <button type="button" class="btn btn-primary btn-brochure" data-action="enquire">Price on Request</button>
+      <div class="pricing-table">
+        <div class="pricing-row pricing-row-head">
+          <span>Configuration</span><span>Area</span><span></span>
+        </div>
+        <div class="pricing-row">
+          <span>3 BHK</span><span>2325 &ndash; 2518 sq. ft.</span>
+          <button type="button" class="btn btn-outline-dark btn-sm" data-action="enquire" data-unit-type="3 BHK">Price on Request</button>
+        </div>
+        <div class="pricing-row">
+          <span>3+1 BHK</span><span>2690 &ndash; 2950 sq. ft.</span>
+          <button type="button" class="btn btn-outline-dark btn-sm" data-action="enquire" data-unit-type="3+1 BHK">Price on Request</button>
+        </div>
+        <div class="pricing-row">
+          <span>4+1 BHK</span><span>3685 sq. ft.</span>
+          <button type="button" class="btn btn-outline-dark btn-sm" data-action="enquire" data-unit-type="4+1 BHK">Price on Request</button>
+        </div>
+      </div>
+      <p class="note-line">Prices vary by tower and floor. Additional block configurations available on request.</p>
     </div>
   </section>
 
@@ -719,7 +734,6 @@
         <li><strong>Innovation</strong> — modernity blended with functionality</li>
         <li><strong>Well-Being</strong> — serenity and balance for every resident</li>
       </ul>
-      <p class="note-line placeholder-note-light">Read more from the developer at <a href="https://vamanaarvindam.com" target="_blank" rel="noopener">vamanaarvindam.com</a>.</p>
     </div>
   </section>
 
@@ -751,7 +765,6 @@
           <p class="testimonial-author">Balwant Singh Balwant <span>· Google Review</span></p>
         </article>
       </div>
-      <p class="google-reviews-link"><a href="https://www.google.com/maps/search/?api=1&query=Vamana+Arvindam+Patiala+Road+Zirakpur" target="_blank" rel="noopener">See all reviews on Google &rarr;</a></p>
     </div>
   </section>
 
@@ -880,7 +893,7 @@
             <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3s.8-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.2-.3.3-.1.6.2.3.9 1.5 1.9 2.4 1.3 1.2 2.4 1.5 2.7 1.7.3.2.5.1.6-.1l.6-.7c.2-.3.4-.2.6-.1l1.7.8c.2.1.3.2.4.3.1.2.1.9-.1 1.6z"/></svg>
             WhatsApp Us
           </button>
-          <button type="button" class="btn btn-outline-light" data-action="call">Call Now</button>
+          <button type="button" class="btn btn-outline-light" data-action="call">Request Callback</button>
         </div>
       </div>
       <form class="contact-form" id="contactForm" novalidate>
@@ -941,6 +954,16 @@
       <input type="tel" id="modalPhone" name="phone" placeholder="Mobile Number" required autocomplete="tel" inputmode="numeric">
       <button type="submit" class="btn btn-primary btn-full" id="modalSubmit">Continue</button>
     </form>
+  </div>
+</div>
+
+<!-- ============ RETURNING VISITOR THANK-YOU POPUP ============ -->
+<div class="modal-overlay" id="thankYouOverlay" hidden>
+  <div class="modal-box modal-box-center" role="dialog" aria-modal="true" aria-labelledby="thankYouTitle">
+    <button type="button" class="modal-close" id="thankYouClose" aria-label="Close">&times;</button>
+    <span class="already-submitted-check" aria-hidden="true">&#10003;</span>
+    <h3 id="thankYouTitle">Thank You!</h3>
+    <p>Our team will contact you shortly.</p>
   </div>
 </div>
 

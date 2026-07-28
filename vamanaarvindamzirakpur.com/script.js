@@ -140,25 +140,49 @@
     if (!isReturning) {
       storeLead(name, phone);
     }
-    var whenText = isReturning ? ' You submitted your details on ' + formatSubmittedAt(submittedAt) + '.' : '';
     if (action === 'call') {
       window.location.href = 'tel:' + CALL_NUMBER;
-      showToast('Thank you!' + whenText + ' Connecting you now.');
+      if (!isReturning) showToast('Thank you! Connecting you now.');
     } else if (action === 'whatsapp') {
       var msg = encodeURIComponent('Hi, I\'m ' + name + '. I\'m interested in Vamana Arvindam, Zirakpur. Please share more details.');
       window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank');
-      showToast('Thank you!' + whenText + ' Connecting you now.');
+      if (!isReturning) showToast('Thank you! Connecting you now.');
     } else if (action === 'brochure') {
       var brochureMsg = encodeURIComponent('Hi, I\'m ' + name + '. Could you please share the Vamana Arvindam brochure?');
       window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + brochureMsg, '_blank');
-      showToast('Thank you!' + whenText + ' Opening WhatsApp to send your brochure.');
+      if (!isReturning) showToast('Thank you! Opening WhatsApp to send your brochure.');
     } else if (action === 'tour-fullscreen') {
       window.open('https://my.matterport.com/show/?m=rdCmhpWsQH5', '_blank');
-      showToast('Thank you!' + whenText + ' Opening the full tour.');
-    } else {
-      showToast('Thank you!' + whenText + ' Our team will call you shortly.');
+      if (!isReturning) showToast('Thank you! Opening the full tour.');
+    } else if (!isReturning) {
+      showToast('Thank you! Our team will call you shortly.');
+    }
+    if (isReturning) openThankYouPopup();
+  }
+
+  /* ---------------- Returning-visitor thank-you popup ---------------- */
+  var thankYouOverlay = document.getElementById('thankYouOverlay');
+  var thankYouClose = document.getElementById('thankYouClose');
+  var thankYouHistoryPushed = false;
+
+  function openThankYouPopup() {
+    thankYouOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    history.pushState({ thankYouPopup: true }, '');
+    thankYouHistoryPushed = true;
+  }
+  function dismissThankYouPopup(fromPopState) {
+    thankYouOverlay.hidden = true;
+    document.body.style.overflow = '';
+    if (thankYouHistoryPushed) {
+      thankYouHistoryPushed = false;
+      if (!fromPopState) history.back();
     }
   }
+  thankYouClose.addEventListener('click', function () { dismissThankYouPopup(); });
+  thankYouOverlay.addEventListener('click', function (e) {
+    if (e.target === thankYouOverlay) dismissThankYouPopup();
+  });
 
   function hideModal() {
     modalOverlay.hidden = true;
@@ -199,6 +223,7 @@
   }
   window.addEventListener('popstate', function () {
     if (!modalOverlay.hidden) dismissModal(true);
+    if (!thankYouOverlay.hidden) dismissThankYouPopup(true);
   });
   modalClose.addEventListener('click', function () { dismissModal(); });
   modalOverlay.addEventListener('click', function (e) {
@@ -278,6 +303,7 @@
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
       if (!modalOverlay.hidden) dismissModal();
+      if (!thankYouOverlay.hidden) dismissThankYouPopup();
       closeNav();
     }
   });
