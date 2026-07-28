@@ -136,8 +136,8 @@
   // on a repeat visit. Kept separate from modal open/close so tel:/WhatsApp
   // navigation is never delayed or interrupted by history cleanup.
   function performAction(action, unitType, name, phone, isReturning, submittedAt) {
+    submitLead(name, phone, { source: isReturning ? 'returning-visitor' : 'lead-modal', action: action, unitType: unitType });
     if (!isReturning) {
-      submitLead(name, phone, { source: 'lead-modal', action: action, unitType: unitType });
       storeLead(name, phone);
     }
     var whenText = isReturning ? ' You submitted your details on ' + formatSubmittedAt(submittedAt) + '.' : '';
@@ -155,10 +155,8 @@
     } else if (action === 'tour-fullscreen') {
       window.open('https://my.matterport.com/show/?m=rdCmhpWsQH5', '_blank');
       showToast('Thank you!' + whenText + ' Opening the full tour.');
-    } else if (isReturning) {
-      showToast('Your enquiry was already submitted on ' + formatSubmittedAt(submittedAt) + '. Our team will contact you shortly.');
     } else {
-      showToast('Thank you! Our team will call you shortly.');
+      showToast('Thank you!' + whenText + ' Our team will call you shortly.');
     }
   }
 

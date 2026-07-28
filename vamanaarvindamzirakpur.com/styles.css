@@ -146,6 +146,9 @@ body { padding-bottom: 0; }
 .note-line {
   font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;
 }
+.note-line a { color: var(--color-bronze-deep); font-weight: 600; text-decoration: underline; }
+.last-updated { display: block; font-size: 0.78rem; color: var(--color-text-muted); opacity: 0.75; margin-top: 6px; }
+.placeholder-note-light a { color: var(--color-bronze); text-decoration: underline; }
 
 /* ==========================================================================
    HEADER — glassmorphism on scroll
@@ -360,6 +363,8 @@ body { padding-bottom: 0; }
 @media (min-width: 700px) { .quick-facts-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 1000px) { .quick-facts-grid { grid-template-columns: repeat(6, 1fr); } }
 .quick-fact { display: flex; flex-direction: column; gap: 4px; }
+.quick-fact-link { text-decoration: none; transition: opacity var(--transition-base); }
+.quick-fact-link:hover { opacity: 0.8; }
 .quick-fact-num { font-family: var(--font-display); font-size: 1.6rem; color: var(--color-bronze); font-weight: 500; }
 .quick-fact-label { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: #B7AF9E; }
 
@@ -370,9 +375,10 @@ body { padding-bottom: 0; }
   display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center;
 }
 .about-media {
-  background-size: cover; background-position: center; border-radius: var(--radius-md);
+  margin: 0; border-radius: var(--radius-md); overflow: hidden;
   aspect-ratio: 4/3; box-shadow: var(--shadow-soft);
 }
+.about-media img { width: 100%; height: 100%; object-fit: cover; }
 .pull-quote {
   font-family: var(--font-display); font-style: italic; font-size: 1.25rem;
   color: var(--color-bronze-deep); line-height: 1.5; margin: 1.6rem 0;
@@ -449,6 +455,12 @@ body { padding-bottom: 0; }
 .config-specs dd { margin: 0; font-weight: 600; }
 
 /* ==========================================================================
+   PRICING SECTION
+   ========================================================================== */
+.pricing-intro { font-size: 1.3rem; color: var(--color-text-dark); margin-bottom: 0.6rem; font-family: var(--font-display); }
+.pricing-intro strong { color: var(--color-bronze-deep); }
+
+/* ==========================================================================
    BROCHURE SECTION
    ========================================================================== */
 .section-brochure {
@@ -517,13 +529,21 @@ body { padding-bottom: 0; }
   position: absolute; bottom: 16px; left: 16px; right: 16px; z-index: 1;
   font-family: var(--font-display); font-style: italic; font-size: 1.1rem;
 }
-.amenity-list {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 24px;
-  max-width: 780px; margin: 0 auto; text-align: left;
+.amenity-groups {
+  display: grid; grid-template-columns: 1fr; gap: 2.4rem;
+  max-width: 1000px; margin: 0 auto; text-align: left;
 }
-@media (min-width: 700px) { .amenity-list { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 700px) { .amenity-groups { grid-template-columns: repeat(2, 1fr); } }
+.amenity-group-title {
+  font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+  font-family: var(--font-body); color: var(--color-bronze); font-weight: 600; margin-bottom: 0.9rem;
+}
+.amenity-list {
+  display: block; margin: 0; padding: 0;
+}
 .amenity-list li {
   font-size: 0.9rem; padding-left: 18px; position: relative; color: #D8D0BE;
+  margin-bottom: 10px;
 }
 .amenity-list li::before {
   content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px;
@@ -533,10 +553,13 @@ body { padding-bottom: 0; }
 /* ==========================================================================
    LOCATION
    ========================================================================== */
+.location-intro { max-width: 760px; color: var(--color-text-muted); margin-bottom: 1.8rem; }
 .map-image-wrap {
-  display: block; width: 100%; margin-bottom: 3rem; border-radius: var(--radius-md);
+  display: block; width: 100%; margin-bottom: 0.6rem; border-radius: var(--radius-md);
   overflow: hidden; box-shadow: var(--shadow-soft);
 }
+.map-link-line { margin: 0 0 3rem; font-size: 0.88rem; }
+.map-link-line a { color: var(--color-bronze-deep); font-weight: 600; text-decoration: underline; }
 .location-grid {
   display: grid; grid-template-columns: 1fr; gap: 2.4rem;
 }
@@ -605,6 +628,7 @@ body { padding-bottom: 0; }
 }
 .contact-form .already-submitted-title { color: var(--color-text-on-dark); }
 .contact-form .already-submitted-text { color: #D8D0BE; }
+.contact-form .form-microcopy { color: #D8D0BE; }
 
 /* ==========================================================================
    FAQ
@@ -621,6 +645,7 @@ body { padding-bottom: 0; }
 .faq-item summary::after { content: '+'; font-size: 1.3rem; color: var(--color-bronze); }
 .faq-item[open] summary::after { content: '\2212'; }
 .faq-item p { margin: 12px 0 0; color: var(--color-text-muted); text-align: left; }
+.faq-item p a { color: var(--color-bronze-deep); text-decoration: underline; font-weight: 600; }
 
 .testimonial-grid {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
@@ -642,6 +667,8 @@ body { padding-bottom: 0; }
   .testimonial-text { font-size: 0.8rem; }
   .testimonial-card { padding: 16px 14px; }
 }
+.google-reviews-link { text-align: center; margin: 1.6rem 0 0; }
+.google-reviews-link a { color: var(--color-bronze-deep); font-weight: 600; text-decoration: underline; }
 
 /* ==========================================================================
    FOOTER
