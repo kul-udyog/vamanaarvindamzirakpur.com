@@ -72,6 +72,24 @@
   }
 
   /* ---------------- Lead submission (shared Apps Script pipeline) ---------------- */
+  // Pushes a named event to the dataLayer for GTM/Google Ads conversion
+  // triggers. Safe no-op if dataLayer isn't defined (e.g. GTM blocked).
+  function pushConversionEvent(eventName, extra) {
+    window.dataLayer = window.dataLayer || [];
+    var payload = { event: eventName };
+    for (var k in extra) { if (extra.hasOwnProperty(k)) payload[k] = extra[k]; }
+    window.dataLayer.push(payload);
+  }
+
+  // Maps an internal action name to the dataLayer event GTM should listen for.
+  var CONVERSION_EVENT_MAP = {
+    call: 'vamana_call_click',
+    whatsapp: 'vamana_whatsapp_click',
+    brochure: 'vamana_brochure_request',
+    'tour-fullscreen': 'vamana_tour_click',
+    'form-submit': 'vamana_form_submit'
+  };
+
   function submitLead(name, phone, opts) {
     opts = opts || {};
     var payload = {
@@ -91,6 +109,9 @@
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
     }).catch(function () { /* fail silently, still proceed with UX */ });
+
+    var eventName = CONVERSION_EVENT_MAP[opts.action] || 'vamana_form_submit';
+    pushConversionEvent(eventName, { unit_type: opts.unitType || '', lead_source: opts.source || '' });
   }
 
   /* ---------------- Config tabs (3 BHK / 3+1 BHK / 4+1 BHK) ---------------- */
