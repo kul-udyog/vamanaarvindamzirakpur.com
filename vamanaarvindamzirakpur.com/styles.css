@@ -767,3 +767,33 @@ body { padding-bottom: 0; }
   max-width: 90vw; text-align: center;
 }
 @media (min-width: 900px) { .toast { bottom: 30px; } }
+
+/* ==========================================================================
+   SUB-PAGE HERO (Price List / Book Site Visit) — compact banner used on
+   pages other than the homepage; clears the fixed header automatically.
+   ========================================================================== */
+.page-hero {
+  position: relative;
+  padding: 148px 0 60px;
+  background: var(--color-charcoal);
+  overflow: hidden;
+}
+.page-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0.28;
+}
+.page-hero-inner { position: relative; z-index: 1; max-width: 760px; }
+.breadcrumb-nav { font-size: 0.78rem; color: #B7AF9E; margin: 0 0 16px; }
+.breadcrumb-nav a { color: var(--color-bronze); }
+.breadcrumb-nav a:hover { text-decoration: underline; }
+.breadcrumb-nav .sep { margin: 0 8px; opacity: 0.6; }
+.breadcrumb-nav [aria-current] { color: var(--color-text-on-dark); }
+.page-hero-title {
+  color: var(--color-text-on-dark); font-size: clamp(2rem, 5vw, 2.8rem);
+  margin: 0 0 14px; line-height: 1.12;
+}
+.page-hero-title em { font-style: italic; font-weight: 400; color: var(--color-bronze); }
+.page-hero-subtitle { color: #D8D0BE; font-size: 1.05rem; max-width: 620px; margin: 0; }
+@media (max-width: 640px) { .page-hero { padding: 118px 0 44px; } }
