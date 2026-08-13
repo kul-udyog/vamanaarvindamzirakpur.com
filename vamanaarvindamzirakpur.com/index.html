@@ -42,11 +42,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="twitter:image" content="https://vamanaarvindamzirakpur.com/images/optimized/sanctuary-grandeur.jpg">
 
 <!-- Preload critical assets -->
-<link rel="preload" as="image" href="images/optimized/sanctuary-grandeur.jpg">
+<link rel="preload" as="image" href="images/optimized/sanctuary-grandeur.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap"></noscript>
 
 <link rel="stylesheet" href="styles.css">
 
@@ -204,7 +204,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <nav class="site-nav" id="siteNav" aria-label="Section navigation">
       <a href="#about">About</a>
-      <a href="#virtual-tour">Virtual Tour</a>
+      <a href="#virtual-tour">Tour</a>
       <a href="floor-plans.html">Floor Plans</a>
       <a href="price-list.html">Price List</a>
       <a href="#brochure">Brochure</a>
@@ -213,7 +213,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="location-connectivity.html">Location</a>
       <a href="#image-gallery">Gallery</a>
       <a href="#faq">FAQs</a>
-      <a href="book-site-visit.html">Book Site Visit</a>
+      <a href="book-site-visit.html">Site Visit</a>
       <a href="#contact">Contact</a>
     </nav>
 
@@ -237,7 +237,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <main id="main">
 
   <!-- ============ HERO ============ -->
-  <section class="hero" id="hero" style="background-image:url('images/optimized/sanctuary-grandeur.jpg')">
+  <section class="hero hero--home" id="hero" style="background-image:url('images/optimized/sanctuary-grandeur.jpg')">
     <div class="hero-overlay"></div>
     <div class="hero-inner">
       <div class="hero-content">
@@ -316,7 +316,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
   <!-- ============ HIGHLIGHTS ============ -->
-  <section class="section section-dark" id="highlights" style="background-image:url('images/optimized/commanding-entrance.jpg')">
+  <section class="section section-dark bg-highlights" id="highlights" style="background-image:url('images/optimized/commanding-entrance.jpg')">
     <div class="section-dark-overlay"></div>
     <div class="container">
       <p class="section-eyebrow section-eyebrow-light">Project Highlights</p>
@@ -904,7 +904,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
   <!-- ============ CONTACT ============ -->
-  <section class="section section-contact" id="contact" style="background-image:url('images/optimized/holistic-lifestyle.jpg')">
+  <section class="section section-contact bg-contact" id="contact" style="background-image:url('images/optimized/holistic-lifestyle.jpg')">
     <div class="section-dark-overlay"></div>
     <div class="container contact-grid">
       <div class="contact-copy">

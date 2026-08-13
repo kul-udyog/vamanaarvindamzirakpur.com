@@ -174,12 +174,12 @@ body { padding-bottom: 0; }
 .site-nav { display: none; }
 @media (min-width: 1080px) {
   .site-nav {
-    display: flex; gap: 16px; flex: 1; justify-content: center;
+    display: flex; gap: 8px; flex: 1; justify-content: center;
     overflow-x: auto; scrollbar-width: none; white-space: nowrap;
   }
   .site-nav::-webkit-scrollbar { display: none; }
   .site-nav a {
-    font-size: 0.83rem; font-weight: 500; color: var(--color-text-on-dark);
+    font-size: 0.76rem; font-weight: 500; color: var(--color-text-on-dark);
     position: relative; padding: 4px 0; white-space: nowrap; flex-shrink: 0;
     transition: color var(--transition-base);
   }
@@ -191,7 +191,11 @@ body { padding-bottom: 0; }
   .site-nav a:hover::after { right: 0; }
 }
 @media (min-width: 1300px) {
-  .site-nav { gap: 22px; }
+  .site-nav { gap: 16px; }
+  .site-nav a { font-size: 0.84rem; }
+}
+@media (min-width: 1500px) {
+  .site-nav { gap: 20px; }
   .site-nav a { font-size: 0.88rem; }
 }
 
@@ -800,3 +804,17 @@ body { padding-bottom: 0; }
 .page-hero-title em { font-style: italic; font-weight: 400; color: var(--color-bronze); }
 .page-hero-subtitle { color: #D8D0BE; font-size: 1.05rem; max-width: 620px; margin: 0; }
 @media (max-width: 640px) { .page-hero { padding: 118px 0 44px; } }
+
+/* Serve smaller, lighter background images on mobile so LCP doesn't wait on
+   a desktop-sized photo the phone doesn't need. The base image is still set
+   inline per page (kept as the desktop/no-JS fallback), so this override
+   needs !important to win at narrow widths. */
+@media (max-width: 640px) {
+  .hero--home { background-image: url('images/optimized/sanctuary-grandeur-mobile.jpg') !important; }
+  .page-hero--price-list { background-image: url('images/optimized/sanctuary-grandeur-mobile.jpg') !important; }
+  .page-hero--book-visit { background-image: url('images/optimized/virtual-tour-sample-flat-mobile.jpg') !important; }
+  .page-hero--floor-plans { background-image: url('images/optimized/floorplan-block7-3bhk-mobile.jpg') !important; }
+  .page-hero--location { background-image: url('images/optimized/location-map-mobile.jpg') !important; }
+  .bg-highlights { background-image: url('images/optimized/commanding-entrance-mobile.jpg') !important; }
+  .bg-contact { background-image: url('images/optimized/holistic-lifestyle-mobile.jpg') !important; }
+}
