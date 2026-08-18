@@ -174,7 +174,7 @@ body { padding-bottom: 0; }
 .site-nav { display: none; }
 @media (min-width: 1080px) {
   .site-nav {
-    display: flex; gap: 8px; flex: 1; justify-content: center;
+    display: flex; gap: 8px; flex: 1; justify-content: center; justify-content: safe center;
     overflow-x: auto; scrollbar-width: none; white-space: nowrap;
   }
   .site-nav::-webkit-scrollbar { display: none; }
@@ -695,6 +695,21 @@ body { padding-bottom: 0; }
   .testimonial-card { padding: 16px 14px; }
 }
 
+.rating-summary {
+  display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+  background: #fff; border: 1px solid rgba(38,34,28,0.08); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft); padding: 26px 30px; margin-bottom: 34px;
+}
+.rating-summary-score { font-family: var(--font-display); font-size: 2.6rem; color: var(--color-text-dark); line-height: 1; }
+.rating-summary-meta { display: flex; flex-direction: column; gap: 4px; }
+.rating-summary-stars { color: var(--color-bronze); font-size: 1.1rem; letter-spacing: 3px; }
+.rating-summary-count { font-size: 0.82rem; color: var(--color-text-muted); }
+.rating-summary-count a { color: var(--color-bronze-deep); text-decoration: underline; }
+@media (max-width: 560px) {
+  .rating-summary { padding: 20px 18px; gap: 16px; }
+  .rating-summary-score { font-size: 2.1rem; }
+}
+
 /* ==========================================================================
    FOOTER
    ========================================================================== */
@@ -815,6 +830,7 @@ body { padding-bottom: 0; }
   .page-hero--book-visit { background-image: url('images/optimized/virtual-tour-sample-flat-mobile.jpg') !important; }
   .page-hero--floor-plans { background-image: url('images/optimized/floorplan-block7-3bhk-mobile.jpg') !important; }
   .page-hero--location { background-image: url('images/optimized/location-map-mobile.jpg') !important; }
+  .page-hero--reviews { background-image: url('images/optimized/luxury-leisure-mobile.jpg') !important; }
   .bg-highlights { background-image: url('images/optimized/commanding-entrance-mobile.jpg') !important; }
   .bg-contact { background-image: url('images/optimized/holistic-lifestyle-mobile.jpg') !important; }
 }
